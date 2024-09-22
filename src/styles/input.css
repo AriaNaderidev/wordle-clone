@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply bg-stone-600 rounded text-white;
+}
+
+.table_div {
+  @apply border-2 border-gray-400 text-red-5n00 flex justify-center items-center font-franklin font-bold text-[2em];
+}
