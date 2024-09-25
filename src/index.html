@@ -12,11 +12,15 @@
     />
   </head>
   <body class="text-xl">
-    <div
-      class="w-screen min-h-screen flex justify-center relative bg-black p-5"
-    >
+    <div class="w-screen min-h-screen flex justify-center relative bg-black">
+      <div
+        id="alert-box"
+        class="w-[125px] h-[45px] p-5 text-black bg-white rounded-[2px] flex justify-center items-center text-center font-bold translate-y-[-50px] duration-[0.3s]"
+      >
+        <span id="alert-message" class="text-xl"></span>
+      </div>
       <section
-        class="w-[85%] max-w-[360px] h-[50%] flex flex-col absolute top-[3%] gap-2"
+        class="w-[85%] max-w-[360px] h-[50%] flex flex-col absolute top-[10%] gap-2"
       >
         <div id="first" class="row_div">
           <div class="table_div"></div>
@@ -63,7 +67,7 @@
       </section>
 
       <section
-        class="max-w-[500px] w-[90%] h-[20%] grid grid-rows-3 absolute bottom-[20%] gap-2"
+        class="max-w-[500px] w-[90%] h-[20%] grid grid-rows-3 absolute bottom-[17%] gap-2"
       >
         <div class="grid grid-cols-10 gap-1">
           <button class="btn">Q</button>
