@@ -54,15 +54,16 @@ const wordsList = [
 ];
 let alertBox = document.querySelector("#alert-box");
 let alertMessage = document.querySelector("#alert-message");
+let resetGameBtn = document.querySelector("#reset-game");
 let rowStep = 0;
 let cellStep = 0;
 let rows = document.querySelectorAll(".row_div");
 let rowCells;
 let alphabetRegexPatern = /^[A-Z]+$/;
 let screenKeyBoardBtns = document.querySelectorAll("button[name]");
-const selectedWordIndex = Math.floor(Math.random() * wordsList.length);
-let selectedWord = wordsList[selectedWordIndex];
-console.log(selectedWord);
+let selectedWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+
+//?Functions
 const deleteCharactersFromRowCells = () => {
   if (cellStep === 0) return;
   cellStep--;
@@ -76,6 +77,31 @@ const deleteCharactersFromRowCells = () => {
   }
 };
 
+console.log(selectedWord);
+
+const resetGame = () => {
+  rowStep = 0;
+  cellStep = 0;
+  selectedWord = "";
+  rows.forEach((row) => {
+    Array.from(row.children).forEach((cell) => {
+      cell.innerHTML = "";
+      cell.style.backgroundColor = "";
+    });
+  });
+
+  alertBox.style.transform = "translateY(-100%)";
+  alertMessage.textContent = "";
+
+  selectedWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+
+  console.log(selectedWord);
+
+  removeEventListeners();
+  addEventListeners();
+  resetGameBtn.style.display = "none";
+};
+
 const allCellsAreGreen = (rowCells) => {
   for (let i = 0; i < rowCells.length; i++) {
     if (rowCells[i].style.backgroundColor !== "green") {
@@ -86,15 +112,9 @@ const allCellsAreGreen = (rowCells) => {
 };
 
 const loopOnRowsAndPrintLettersAtCells = (letter) => {
-  console.log(letter);
-
-  if (rowStep > 5) return;
-
   rowCells = rows[rowStep].children;
 
   if (alphabetRegexPatern.test(letter) && letter.length === 1) {
-    console.log("Entered here 1 -- first condition");
-
     if (cellStep < rowCells.length) {
       rowCells[cellStep].innerHTML = letter;
 
@@ -110,15 +130,15 @@ const loopOnRowsAndPrintLettersAtCells = (letter) => {
     if (allCellsAreGreen(rowCells)) {
       alertMessage.textContent = `Successful "${selectedWord}"`;
       alertBox.style.transform = "translateY(25px)";
+      resetGameBtn.style.display = "block";
       removeEventListeners();
     } else if (rowStep === 5 && cellStep > 4) {
+      resetGameBtn.style.display = "block";
       alertMessage.textContent = `Lose`;
       alertBox.style.transform = "translateY(25px)";
       removeEventListeners();
     }
   } else if (letter === "ENTER") {
-    console.log("PRESSED ENTER");
-
     if (cellStep === 5) {
       rowStep++;
       cellStep = 0;
@@ -128,7 +148,7 @@ const loopOnRowsAndPrintLettersAtCells = (letter) => {
   }
 };
 
-// Event Listeners
+//? Event Listeners
 const handleKeyDown = (event) => {
   event.preventDefault();
   loopOnRowsAndPrintLettersAtCells(event.key.toUpperCase());
@@ -154,5 +174,7 @@ const removeEventListeners = () => {
   });
 };
 
-// Initialize the game
+resetGameBtn.addEventListener("click", resetGame);
+
+//? Initialize the game
 addEventListeners();
