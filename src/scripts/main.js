@@ -59,20 +59,17 @@ let cellStep = 0;
 let rows = document.querySelectorAll(".row_div");
 let rowCells;
 let alphabetRegexPatern = /^[A-Z]+$/;
-let letterKeyPress = "";
 let screenKeyBoardBtns = document.querySelectorAll("button[name]");
 const selectedWordIndex = Math.floor(Math.random() * wordsList.length);
 let selectedWord = wordsList[selectedWordIndex];
 console.log(selectedWord);
-
-//? Functions
 const deleteCharactersFromRowCells = () => {
   if (cellStep === 0) return;
   cellStep--;
   if (rowCells[cellStep].innerHTML !== "") {
     rowCells[cellStep].innerHTML = "";
     rowCells[cellStep].style.backgroundColor = "";
-  } else if (rowCells[cellStep - 1].innerHTML === "") {
+  } else if (cellStep > 0 && rowCells[cellStep - 1].innerHTML === "") {
     cellStep--;
     rowCells[cellStep].innerHTML = "";
     rowCells[cellStep].style.backgroundColor = "";
@@ -98,80 +95,64 @@ const loopOnRowsAndPrintLettersAtCells = (letter) => {
   if (alphabetRegexPatern.test(letter) && letter.length === 1) {
     console.log("Entered here 1 -- first condition");
 
-    letterKeyPress = letter;
-
     if (cellStep < rowCells.length) {
-      rowCells[cellStep].innerHTML = letterKeyPress;
+      rowCells[cellStep].innerHTML = letter;
 
-      if (selectedWord[cellStep] === letterKeyPress) {
+      if (selectedWord[cellStep] === letter) {
         rowCells[cellStep].style.backgroundColor = "green";
-      } else if (selectedWord.includes(letterKeyPress)) {
+      } else if (selectedWord.includes(letter)) {
         rowCells[cellStep].style.backgroundColor = "#FFEE8C";
       }
 
       cellStep++;
-      letterKeyPress = "";
     }
 
     if (allCellsAreGreen(rowCells)) {
-      alertMessage.textContent = `Successfull "${selectedWord}"`;
+      alertMessage.textContent = `Successful "${selectedWord}"`;
       alertBox.style.transform = "translateY(25px)";
-      document.removeEventListener("keydown", loopOnRowsAndPrintLettersAtCells);
+      removeEventListeners();
     } else if (rowStep === 5 && cellStep > 4) {
       alertMessage.textContent = `Lose`;
       alertBox.style.transform = "translateY(25px)";
-      document.removeEventListener("keydown", loopOnRowsAndPrintLettersAtCells);
+      removeEventListeners();
     }
   } else if (letter === "ENTER") {
     console.log("PRESSED ENTER");
 
-    letterKeyPress = "";
-    console.log(letterKeyPress);
-
     if (cellStep === 5) {
       rowStep++;
       cellStep = 0;
-      letterKeyPress = "";
     }
-    return;
   } else if (letter === "BACKSPACE") {
     deleteCharactersFromRowCells();
   }
-  letter = "";
 };
 
-//? Add event listener
-document.addEventListener("keydown", (event) =>
-  loopOnRowsAndPrintLettersAtCells(event.key.toUpperCase())
-);
+// Event Listeners
+const handleKeyDown = (event) => {
+  event.preventDefault();
+  loopOnRowsAndPrintLettersAtCells(event.key.toUpperCase());
+};
 
-// screenKeyBoardBtns.forEach((btn) => {
-//   btn.addEventListener("click", (event) => {
-//     let keyValue = event.target.name.toUpperCase();
+const handleButtonClick = (event) => {
+  event.preventDefault();
+  const keyValue = event.target.name.toUpperCase();
+  loopOnRowsAndPrintLettersAtCells(keyValue);
+};
 
-//     // if (alphabetRegexPatern.test(keyValue)) {
-//     //   if (cellStep > 5) return;
-//     //   loopOnRowsAndPrintLettersAtCells(keyValue);
-//     //   letterKeyPress = "";
-//     // }
-
-//     let keyPressEvent = new KeyboardEvent("keypress", {
-//       key: keyValue,
-//       code: `Key${keyValue}`,
-//       keyCode: keyValue.charCodeAt(0),
-//       bubbles: true,
-//     });
-
-//     keyValue = "";
-
-//     document.dispatchEvent(keyPressEvent);
-//     document.removeEventListener("keypress", keyPressEvent);
-//   });
-// });
-
-screenKeyBoardBtns.forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    let keyValue = event.target.name.toUpperCase();
-    loopOnRowsAndPrintLettersAtCells(keyValue);
+const addEventListeners = () => {
+  document.addEventListener("keydown", handleKeyDown);
+  screenKeyBoardBtns.forEach((btn) => {
+    btn.addEventListener("click", handleButtonClick);
   });
-});
+};
+
+const removeEventListeners = () => {
+  document.removeEventListener("keydown", handleKeyDown);
+  screenKeyBoardBtns.forEach((btn) => {
+    btn.removeEventListener("click", handleButtonClick);
+  });
+};
+
+// Initialize the game
+addEventListeners();
