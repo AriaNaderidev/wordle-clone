@@ -58,83 +58,98 @@ let rowStep = 0;
 let cellStep = 0;
 let rows = document.querySelectorAll(".row_div");
 let rowCells;
-//* the user entered value should obey this Regex pattern
-let regex = /^[A-Z]+$/;
-let btnPress;
-//*creating random numbers for selecting different word from word list each time
+let alphabetRegexPatern = /^[A-Z]+$/;
+let letterKeyPress;
 const selectedWordIndex = Math.floor(Math.random() * 50);
 let selectedWord = wordsList[selectedWordIndex];
 console.log(selectedWord);
 
 //? Functions
-const deleteChar = () => {
-  //* check if there is letter in cells
-  if (cellStep > 0) {
-    console.log(cellStep);
+const deleteCharactersFromRowCells = () => {
+  // debugger;
+  if (cellStep === 0) return;
+  cellStep--;
+  if (rowCells[cellStep].innerHTML !== "") {
+    // debugger;
 
-    //*check if the selected cell isn't full
-    if (rowCells[cellStep].innerHTML !== "") {
-      rowCells[cellStep].innerHTML = "";
-      rowCells[cellStep].style.backgroundColor = "";
-    }
+    rowCells[cellStep].innerHTML = "";
+    rowCells[cellStep].style.backgroundColor = "";
+  } else if (rowCells[cellStep - 1].innerHTML === "") {
+    // debugger;
 
-    //* check if the selected cell is empty , jump one cell back and then make them empty
-    else if (rowCells[cellStep].innerHTML === "") {
-      cellStep--;
-      rowCells[cellStep].innerHTML = "";
-      rowCells[cellStep].style.backgroundColor = "";
-    }
+    // debugger;
+    cellStep--;
+    rowCells[cellStep].innerHTML = "";
+    rowCells[cellStep].style.backgroundColor = "";
   }
 };
 
-const loopOnRows = (e) => {
-  btnPress = e.key.toUpperCase();
-  //*check if a row cells are full and when user clicked on enter jump on next row
-  if (cellStep === 4 && e.key === "Enter") {
+const allCellsAreGreen = (rowCells) => {
+  for (let i = 0; i < rowCells.length; i++) {
+    if (rowCells[i].style.backgroundColor !== "green") {
+      return false;
+    }
+  }
+  return true;
+};
+
+const loopOnRowsAndPrintLettersAtCells = (letter) => {
+  letterKeyPress = letter.key.toUpperCase();
+  if (rowStep > 5) return;
+  rowCells = rows[rowStep].children;
+
+  if (cellStep === 5 && letter.key === "Enter") {
+    if (rowStep > 5) return;
+    console.log(cellStep, "enter");
+
     ++rowStep;
     cellStep = 0;
     return;
   }
-  //*check if user clicked on Backspace , call deleteCell() function
-  if (e.key === "Backspace") {
-    deleteChar();
+  if (cellStep - 1 < rowCells.length && letter.key === "Backspace") {
+    deleteCharactersFromRowCells();
     return;
   }
-  //*check if the Regex return is true and the value is one letter
-  if (regex.test(btnPress) && btnPress.length === 1) {
+
+  if (alphabetRegexPatern.test(letterKeyPress) && letterKeyPress.length === 1)
     if (rowStep < rows.length) {
-      rowCells = rows[rowStep].children;
-      if (cellStep < 5) {
-        for (let i = 0; i < selectedWord.length; i++) {
-          //* change cell color to green if the letter exists in the word and it is at the right place
-          if (cellStep === i && selectedWord[i] === btnPress) {
-            rowCells[cellStep].style.backgroundColor = "green";
-            //* if all cells are green , it means that user found the word , show the successful alert !
-            if (
-              Object.values(rowCells).every(
-                (row) => row.style.backgroundColor === "green"
-              )
-            ) {
-              alertMessage.textContent = `Successfull "${selectedWord}"`;
-              alertBox.style.transform = "translateY(25px)";
-              document.removeEventListener("keydown", loopOnRows);
-            } //*  change cell color to yellow if the letter exists in the word but it isn't at the right place
-          } else if (cellStep !== i && selectedWord[i] === btnPress) {
-            rowCells[cellStep].style.backgroundColor = "#FFEE8C";
-          }
-        }
-        //*check if It's in cell length
-        if (cellStep >= 0 && cellStep <= 4) {
-          //* if the last cell isn't empty then ...
-          if (cellStep === 4 && rowCells[4].innerHTML !== "") return;
-          //*  then fill it and if the cell is not the last one , cell step pluse one
-          rowCells[cellStep].innerHTML = btnPress;
-          if (cellStep !== 4) cellStep++;
-        }
+      if (selectedWord[cellStep] === letterKeyPress) {
+        rowCells[cellStep].style.backgroundColor = "green";
+      } else if (selectedWord.includes(letterKeyPress)) {
+        if (cellStep > 4) return;
+        rowCells[cellStep].style.backgroundColor = "#FFEE8C";
+      }
+
+      if (allCellsAreGreen(rowCells)) {
+        alertMessage.textContent = `Successfull "${selectedWord}"`;
+        alertBox.style.transform = "translateY(25px)";
+        document.removeEventListener(
+          "keydown",
+          loopOnRowsAndPrintLettersAtCells
+        );
+      } else if (rowStep === 5 && cellStep >= 4) {
+        alertMessage.textContent = `Lose`;
+        alertBox.style.transform = "translateY(25px)";
+        document.removeEventListener(
+          "keydown",
+          loopOnRowsAndPrintLettersAtCells
+        );
+      }
+
+      if (cellStep > 4) return;
+
+      if (cellStep < rowCells.length) {
+        cellStep++;
+        rowCells[cellStep - 1].innerHTML = letterKeyPress;
       }
     }
-  }
 };
 
+// const animationsForEnterAndBackspaceBtn = (letter) => {
+//   const enter = [letter.key === "Enter"] ?? {};
+//   console.log(enter);
+// };
+
 //? Add event listener
-document.addEventListener("keydown", loopOnRows);
+document.addEventListener("keydown", loopOnRowsAndPrintLettersAtCells);
+// document.addEventListener("keydown", animationsForEnterAndBackspaceBtn);
