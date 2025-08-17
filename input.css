@@ -13,3 +13,12 @@
 .table_div {
   @apply w-1/5 h-full  border-2 border-gray-400 text-white flex justify-center items-center font-mono font-bold text-[2em];
 }
+
+.text {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.842);
+  font-size: 30px;
+  font-weight: bold;
+}

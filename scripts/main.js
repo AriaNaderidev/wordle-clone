@@ -62,6 +62,20 @@ let rowCells;
 let alphabetRegexPatern = /^[A-Z]+$/;
 let screenKeyBoardBtns = document.querySelectorAll("button[name]");
 let selectedWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+let enterBtn = document.querySelector("button[name='enter']");
+let deleteBtn = document.querySelector("button[name='delete']");
+
+//?Mobile functionality
+const handleEnterButtonClick = () => {
+  loopOnRowsAndPrintLettersAtCells("ENTER");
+};
+
+const handleDeleteButtonClick = () => {
+  loopOnRowsAndPrintLettersAtCells("BACKSPACE");
+};
+
+enterBtn.addEventListener("click", handleEnterButtonClick);
+deleteBtn.addEventListener("click", handleDeleteButtonClick);
 
 //?Functions
 const deleteCharactersFromRowCells = () => {
@@ -76,8 +90,6 @@ const deleteCharactersFromRowCells = () => {
     rowCells[cellStep].style.backgroundColor = "";
   }
 };
-
-console.log(selectedWord);
 
 const resetGame = () => {
   rowStep = 0;
@@ -94,8 +106,6 @@ const resetGame = () => {
   alertMessage.textContent = "";
 
   selectedWord = wordsList[Math.floor(Math.random() * wordsList.length)];
-
-  console.log(selectedWord);
 
   removeEventListeners();
   addEventListeners();
