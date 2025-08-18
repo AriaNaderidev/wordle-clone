@@ -139,13 +139,13 @@ const loopOnRowsAndPrintLettersAtCells = (letter) => {
 
     if (allCellsAreGreen(rowCells)) {
       alertMessage.textContent = `Successful "${selectedWord}"`;
-      alertBox.style.transform = "translateY(25px)";
+      alertBox.style.transform = "translateY(200px)";
       resetGameBtn.style.display = "block";
       removeEventListeners();
     } else if (rowStep === 5 && cellStep > 4) {
       resetGameBtn.style.display = "block";
       alertMessage.textContent = `Lose`;
-      alertBox.style.transform = "translateY(25px)";
+      alertBox.style.transform = "translateY(250px)";
       removeEventListeners();
     }
   } else if (letter === "ENTER") {

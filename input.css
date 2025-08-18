@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .btn {
-  @apply bg-stone-600 rounded text-white;
+  @apply bg-stone-600 rounded text-black;
 }
 
 .row_div {
@@ -11,14 +11,14 @@
 }
 
 .table_div {
-  @apply w-1/5 h-full  border-2 border-gray-400 text-white flex justify-center items-center font-mono font-bold text-[2em];
+  @apply w-1/5 h-full  border-2 border-gray-400 text-black flex justify-center items-center font-mono font-bold text-[2em];
 }
 
 .text {
   position: fixed;
   top: 10px;
   left: 10px;
-  color: rgba(255, 255, 255, 0.842);
+  color: rgba(138, 100, 100, 0.842);
   font-size: 30px;
   font-weight: bold;
 }
