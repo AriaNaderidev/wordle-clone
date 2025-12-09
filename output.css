@@ -815,7 +815,7 @@ video {
 }
 
 #alert-box {
-  background-color: rgba(80, 77, 77, 0.823);
+  background-color: rgb(80, 77, 77);
   color: white;
 }
 
@@ -826,4 +826,24 @@ video {
   border-radius: 5px;
   width: auto;
   top: 90%;
+}
+
+#how-play {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(138, 100, 100, 0.842);
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#container {
+  background-color: rgb(18, 18, 18);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
